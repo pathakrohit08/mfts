@@ -1,0 +1,5 @@
+TRUNCATE ONLY public.stockmaster
+RESTART IDENTITY;
+
+TRUNCATE ONLY public.stockdetails
+RESTART IDENTITY;
