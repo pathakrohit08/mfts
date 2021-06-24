@@ -93,18 +93,15 @@ class SQLDB(object):
         df.head(df.shape[0]).to_sql(table_name, self.__engine,if_exists='append',index=True)
 
     def get_stock_details(self,tickrId,start_date,end_date):  
-        startDate="'"+start_date+"'"
-        endDate="'"+end_date+"'"
-        df = pd.read_sql(f'select * from stockdetails where "stockId" ={tickrId} and "Date">={endDate} and "Date"<={startDate} order by "Date" asc', con=self.__engine)
+        # startDate="'"+start_date+"'"
+        # endDate="'"+end_date+"'"
+        df = pd.read_sql(f'select * from stockdetails where "stockId" =\'{tickrId}\' and "Date">=\'{end_date}\' and "Date"<=\'{start_date}\' order by "Date" asc', con=self.__engine)
         return df
 
     def get_tickr(self,tickr):
         try:
-            tickrInfo="'"+tickr+"'"
-            s=f'select * from "stockmaster" where "Symbol" =\'{tickr}\';'
-            print(s.replace('\n',''))
-            df = pd.read_sql(s, con=self.__engine)
-            #print(df.head())
+            # tickrInfo="'"+tickr+"'"
+            df = pd.read_sql(f'select * from "stockmaster" where "Symbol" =\'{tickr}\';', con=self.__engine)
             return df
         except Exception as e:
             print(e)

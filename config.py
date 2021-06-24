@@ -60,6 +60,13 @@ class Config:
     DB_PASSWORD="admin"
     DB_DATABASE="stockDB"
     DB_PORT=5432
+
+
+    EMAIL_HOSTNAME='smtp.gmail.com'
+    EMAIL_FROM='advertrohit8190@gmail.com'
+    EMAIL_TO='pathakrohit08@gmail.com'
+    EMAIL_USERNAME='advertrohit8190'
+    EMAIL_PASSWORD='rohit@8190'
     FLASK_PORT=5000
     SECRET_KEY = os.getenv('SECRET_KEY', default='A very terrible secret key.')
  

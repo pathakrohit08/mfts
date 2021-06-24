@@ -14,6 +14,7 @@ from config import Config
 from connection import SQLDB
 from load import LoadTrade
 from scraper import get_live_data
+from utilities import send_email
 
 
 class Updater:
@@ -39,6 +40,8 @@ class Updater:
             except Exception as e:
                 print(f"Exception occured during seeding the database {e}")
 
+        send_email("Initial load of data was complete","Load Data")
+
     def update_data(self,filename='nasdaq.csv'):
         """use this function to update the data"""
         data_path=os.path.join(os.getcwd(),Config.DATA_PATH,filename)
@@ -54,6 +57,8 @@ class Updater:
             except Exception as e:
                 print(f"Exception occured during updating the records {e}")
 
+        send_email("Update of data was complete","Update Data")
+
 
     def perform_backtest(self):
         """use this function to perform backtest"""
@@ -62,33 +67,31 @@ class Updater:
             print("Market is closed for today")
             return 
 
-        while time(7,30) <= datetime.now().time() <= time(16,00):
+        while time(9,30) <= datetime.now().time() <= time(16,00):
             tickrs_data_path=os.path.join(os.getcwd(),Config.DATA_PATH,"TICKRS.csv")
             tickrs_df=pd.read_csv(tickrs_data_path)
             if not tickrs_df.empty:
                 # first update the symbol related information
-                print(tickrs_df.head())
                 for tickr in tickrs_df.Tickrs.to_list():
                     self._l.update_existing_records(tickr)
 
                 # perform backtest on those tickrs and display table
-                p = PrettyTable(['TICKR','DATE','RECOM','REASON','EMA5','SMA20','ADX_14','DMP_14','DMN_14','RSI','TSI','ACCURACY (%)','AVG DAYS'])
+                __table = PrettyTable(['TICKR','DATE','RECOM','REASON','EMA5','SMA20','ADX_14','DMP_14','DMN_14','RSI','TSI','ACCURACY (%)','AVG DAYS'])
                 for tickr in tickrs_df.Tickrs.to_list():
                     b=BackTest(tickr,-120,False,True)
-                    p.add_row(b.execute_strategy(True))
-                print(p)
+                    __table.add_row(b.execute_strategy(True))
+                print(__table)
 
                 # sleep for 10 mns to avoid any threshold limit
-                t.sleep(60)
+                t.sleep(600)
         print("Market closed")
 
 if __name__=='__main__':
     u=Updater()
-    u.load_data()
-    #u.perform_backtest()
-    #print("Performing update for the final time of the day")
-    #u.update_data()
-    
+    #u.load_data()
+    u.perform_backtest()
+    print("Performing update for the final time of the day")
+    u.update_data()
 
 
 
