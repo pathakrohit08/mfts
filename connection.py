@@ -1,7 +1,9 @@
-import psycopg2
-from config import Config
-from sqlalchemy import create_engine
 import pandas as pd
+import psycopg2
+from sqlalchemy import create_engine
+
+from config import Config
+
 
 class SQLDB(object):
     """This is a singleton class that returns only 1 instance of POSTGRESSQL connection"""
@@ -97,9 +99,15 @@ class SQLDB(object):
         return df
 
     def get_tickr(self,tickr):
-        tickrInfo="'"+tickr+"'"
-        df = pd.read_sql(f'select * from "stockmaster" where "Symbol" ={tickrInfo}', con=self.__engine)
-        return df
+        try:
+            tickrInfo="'"+tickr+"'"
+            s=f'select * from "stockmaster" where "Symbol" =\'{tickr}\';'
+            print(s.replace('\n',''))
+            df = pd.read_sql(s, con=self.__engine)
+            #print(df.head())
+            return df
+        except Exception as e:
+            print(e)
 
     def delete_stock_details(self,stockId):
         """use this function to delete stock details """
@@ -149,4 +157,5 @@ class SQLDB(object):
 
 
     
+
 

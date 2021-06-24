@@ -76,8 +76,9 @@ class LoadTrade(object):
     def update_existing_records(self,tickr=''):
         """use this function to update the records, offload it to celery in the future"""
         stock_master_df=self.__dbconn.get_tickr(tickr)
+        #print(stock_master_df.head())
         if stock_master_df.empty:
-            raise ValueError(f"data does not exist for {self.__tickr}")
+            raise ValueError(f"data does not exist for {tickr}")
 
         last_updated_date=stock_master_df.iloc[0].LastUpdatedDate.strftime('%Y-%m-%d')
         print(f'Last updated date {last_updated_date}')
@@ -168,7 +169,6 @@ class LoadTrade(object):
 
 
     
-
 
 
 

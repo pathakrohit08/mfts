@@ -50,10 +50,10 @@ class Config:
     ]
 
     PRICE_COL='Close'
-    # DB_HOSTNAME="73.10.33.109"
-    # DB_USERNAME="dbuser"
-    # DB_PASSWORD="admin"
-    # DB_DATABASE="stockDB"
+    #DB_HOSTNAME="73.10.33.109"
+    #DB_USERNAME="dbuser"
+    #DB_PASSWORD="admin"
+    #DB_DATABASE="stockDB"
 
     DB_HOSTNAME="localhost"
     DB_USERNAME="dbuser"
