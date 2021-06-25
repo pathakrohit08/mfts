@@ -21,7 +21,6 @@ class Updater:
     def __init__(self):
         self.master_df=None
         self._l=LoadTrade()
-        self.tickrs=["AMC","GME","FB","CLNE"]
         data_path=os.path.join(os.getcwd(),Config.DATA_PATH,"holidays.csv")
         self.holidays_df=pd.read_csv(data_path)
 
@@ -32,7 +31,6 @@ class Updater:
 
         for index,row in self.master_df.iterrows():
             try:
-                #if row["Symbol"] not in self.tickrs:continue
                 print(f'processing {row["Symbol"]},{row["Name"]}')
                 self._l.add_new_records(row['Symbol'],row['Name'],row['Volume'],row['Industry'],row['Sector'])
                 # intentionally sleep to avoid any threshold limit
@@ -49,7 +47,6 @@ class Updater:
 
         for index,row in self.master_df.iterrows():
             try:
-                #if row["Symbol"] not in self.tickrs:continue
                 print(f'updating {row["Symbol"]},{row["Name"]}')
                 self._l.update_existing_records(row['Symbol'])
                 # intentionally sleep to avoid any threshold limit
@@ -57,13 +54,13 @@ class Updater:
             except Exception as e:
                 print(f"Exception occured during updating the records {e}")
 
-        send_email("Update of data was complete","Update Data")
+        send_email("Daily update of the data was complete","Update Data")
 
 
     def perform_backtest(self):
         """use this function to perform backtest"""
         current_date=datetime.now().strftime('%m-%d-%Y') 
-        if  current_date in self.holidays_df.Date.to_list():
+        if  current_date in self.holidays_df.Date.to_list() or datetime.today().isoweekday()== 6 or datetime.today().isoweekday()== 7:
             print("Market is closed for today")
             return 
 
@@ -85,13 +82,14 @@ class Updater:
                 # sleep for 10 mns to avoid any threshold limit
                 t.sleep(600)
         print("Market closed")
+        print("Performing update for the final time of the day")
+        self.update_data()
 
 if __name__=='__main__':
     u=Updater()
     #u.load_data()
     u.perform_backtest()
-    print("Performing update for the final time of the day")
-    u.update_data()
+    #u.update_data()
 
 
 
