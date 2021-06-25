@@ -76,7 +76,7 @@ class Updater:
                 __table = PrettyTable(['TICKR','DATE','RECOM','REASON','EMA5','SMA20','ADX_14','DMP_14','DMN_14','RSI','TSI','ACCURACY (%)','AVG DAYS'])
                 for tickr in tickrs_df.Tickrs.to_list():
                     b=BackTest(tickr,-120,False,True)
-                    __table.add_row(b.execute_strategy(True))
+                    __table.add_row(b.execute_strategy(False))
                 print(__table)
 
                 # sleep for 10 mns to avoid any threshold limit

@@ -32,7 +32,7 @@ class LoadTrade(object):
         #self.process()
         #print(self.__df.tail(5))
 
-        self.__insert_records(df)
+        self.__insert_records(df,tickr)
         #self.__process_records(False)
 
     def __calculate_all_indicators(self,df):
@@ -96,7 +96,7 @@ class LoadTrade(object):
                     d1['Date'] = pd.to_datetime(d1['Date'], format = '%Y-%m-%d')
                     d1.set_index(['Date'], inplace=True)
                     result=pd.concat([d1,mask])
-                    self.__calculate_all_indicators(result)
+                    df=self.__calculate_all_indicators(result)
                     self.__dbconn.delete_stock_details(int(stock_master_df.iloc[0].Id))
                     df['stockId']=int(stock_master_df.iloc[0].Id)
                     self.__dbconn.save_data('stockdetails',df)
@@ -150,14 +150,17 @@ class LoadTrade(object):
         df=pd.concat([df,adx_df],axis=1)
         return df
 
-    def __insert_records(self,df):
-        sql = """INSERT INTO public.stockmaster("Symbol","Name","Volume","Sector","Industry","LastUpdatedDate")
-                VALUES(%s,%s,%s,%s,%s,%s) RETURNING "Id";"""
+    def __insert_records(self,df,tickr):
+        stock_master_df=self.__dbconn.get_tickr(tickr)
+        # sql = """INSERT INTO public.stockmaster("Symbol","Name","Volume","Sector","Industry","LastUpdatedDate")
+        #         VALUES(%s,%s,%s,%s,%s,%s) RETURNING "Id";"""
                 
-        stock_id=self.__dbconn.save_stock_master(sql,self.__tickr,
-                self.__asset,self.__volume,
-                self.__sector,self.__industry,datetime.now().strftime('%Y-%m-%d'))
-        df['stockId']=stock_id
+        # stock_id=self.__dbconn.save_stock_master(sql,self.__tickr,
+        #         self.__asset,self.__volume,
+        #         self.__sector,self.__industry,datetime.now().strftime('%Y-%m-%d'))
+        
+        #df['stockId']=stock_id
+        df['stockId']=stock_master_df.iloc[0].Id
 
         self.__dbconn.save_data('stockdetails',df)
 
