@@ -4,7 +4,7 @@ import datetime
 import io
 import os
 import time as t
-from datetime import datetime, time
+from datetime import datetime, time,timedelta
 
 import pandas as pd
 from prettytable import PrettyTable
@@ -78,9 +78,10 @@ class Updater:
                     b=BackTest(tickr,-120,False,True)
                     __table.add_row(b.execute_strategy(False))
                 print(__table)
+                print(f"Next update at {datetime.now() + timedelta(seconds = 300)}")
 
                 # sleep for 10 mns to avoid any threshold limit
-                t.sleep(600)
+                t.sleep(300)
         print("Market closed")
         print("Performing update for the final time of the day")
         self.update_data()

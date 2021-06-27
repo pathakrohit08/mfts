@@ -32,7 +32,7 @@ class LoadTrade(object):
         #self.process()
         #print(self.__df.tail(5))
 
-        self.__insert_records(df,tickr)
+        self.__insert_records(df)
         #self.__process_records(False)
 
     def __calculate_all_indicators(self,df):
@@ -81,7 +81,7 @@ class LoadTrade(object):
             raise ValueError(f"data does not exist for {tickr}")
 
         last_updated_date=stock_master_df.iloc[0].LastUpdatedDate.strftime('%Y-%m-%d')
-        print(f'Last updated date {last_updated_date}')
+        print(f'Last updated date for {tickr},{last_updated_date}')
         current_date=datetime.now().strftime('%Y-%m-%d')
 
         if current_date!=last_updated_date and current_date>last_updated_date:
@@ -152,15 +152,15 @@ class LoadTrade(object):
 
     def __insert_records(self,df,tickr):
         stock_master_df=self.__dbconn.get_tickr(tickr)
-        # sql = """INSERT INTO public.stockmaster("Symbol","Name","Volume","Sector","Industry","LastUpdatedDate")
-        #         VALUES(%s,%s,%s,%s,%s,%s) RETURNING "Id";"""
+        sql = """INSERT INTO public.stockmaster("Symbol","Name","Volume","Sector","Industry","LastUpdatedDate")
+                VALUES(%s,%s,%s,%s,%s,%s) RETURNING "Id";"""
                 
-        # stock_id=self.__dbconn.save_stock_master(sql,self.__tickr,
-        #         self.__asset,self.__volume,
-        #         self.__sector,self.__industry,datetime.now().strftime('%Y-%m-%d'))
+        stock_id=self.__dbconn.save_stock_master(sql,self.__tickr,
+                self.__asset,self.__volume,
+                self.__sector,self.__industry,datetime.now().strftime('%Y-%m-%d'))
         
-        #df['stockId']=stock_id
-        df['stockId']=stock_master_df.iloc[0].Id
+        df['stockId']=stock_id
+        #df['stockId']=stock_master_df.iloc[0].Id
 
         self.__dbconn.save_data('stockdetails',df)
 

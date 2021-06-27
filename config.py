@@ -3,10 +3,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    # move it to os.getenv
+    """celery configuration"""
     CELERY_BROKER_URL ="redis://localhost:6379" 
     RESULT_BACKEND ="redis://localhost:6379" 
 
+    """other settings"""
     DATA_PATH="input"
     moving_average_conf=[
         {
@@ -44,32 +45,29 @@ class Config:
         {
             'days':12,
             'label':'TSI-12'
-        }
-
-        
+        } 
     ]
 
-    PRICE_COL='Close'
+    """Database config settings"""
     #DB_HOSTNAME="73.10.33.109"
-    #DB_USERNAME="dbuser"
-    #DB_PASSWORD="admin"
-    #DB_DATABASE="stockDB"
-
     DB_HOSTNAME="localhost"
     DB_USERNAME="dbuser"
     DB_PASSWORD="admin"
     DB_DATABASE="stockDB"
     DB_PORT=5432
 
+    PRICE_COL='Close'
 
+    """Email config settings"""
     EMAIL_HOSTNAME='smtp.gmail.com'
     EMAIL_FROM='advertrohit8190@gmail.com'
     EMAIL_TO='pathakrohit08@gmail.com'
     EMAIL_USERNAME='advertrohit8190'
     EMAIL_PASSWORD='rohit8190'
+
+    """Flask settings"""
     FLASK_PORT=5000
     SECRET_KEY = os.getenv('SECRET_KEY', default='A very terrible secret key.')
-
     swagger_url="swagger/ui/index"
 
 class DevelopmentConfig(Config):

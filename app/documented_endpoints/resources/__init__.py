@@ -55,6 +55,7 @@ class stock(Resource):
 
 
 
+
 @namespace.route('/stocks/details/<string:stock_name>')
 class stockdetails(Resource):
     @namespace.response(200, 'Success')
