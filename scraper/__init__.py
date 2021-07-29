@@ -28,7 +28,8 @@ def get_live_data(STOCK_TICKR,verbose=False):
     return dataDict
 
 def get_historic_data(csv_url):
-    req = requests.get(csv_url)
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    req = requests.get(csv_url,headers=headers)
     url_content = req.content
     return url_content
 

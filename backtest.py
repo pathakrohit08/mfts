@@ -108,9 +108,9 @@ class BackTest(object):
 
     def __get_buy_signal_reason(self,row):
         ans=[]
-        if row["EMA5"]>row["SMA20"]:ans.append("EMA5 is greater than SMA20")
-        if row["TSI"]>0:ans.append("TSI crossed centerline")
-        if row["DMP_14"]>row["DMN_14"]:ans.append("DI+ is above DI-")
+        if row["EMA5"]>row["SMA20"]:ans.append("EMA5 > SMA20")
+        if row["TSI"]>0:ans.append("TSI>0")
+        if row["DMP_14"]>row["DMN_14"]:ans.append("DI+ > DI-")
 
         return ans
 
@@ -119,11 +119,11 @@ class BackTest(object):
         return  row["Close"]<row["SMA20"] or row["EMA5"]<row["SMA20"] or row["TSI"]<0 or row["DMP_14"]<row["DMN_14"] or row['RSI']>=80
 
     def __get_sell_signal_reason(self,row):
-        if row["EMA5"]<row["SMA20"]: return "EMA5 went below SMA20"
-        if row["TSI"]<0:return "TSI is below center line"
-        if row["DMP_14"]<row["DMN_14"]:return "DI+ went under DI-"
-        if row["RSI"]>80: return "RSI went above 80, indicates overbought"
-        if row["Close"]<row["SMA20"]: return "Close price trending down"
+        if row["EMA5"]<row["SMA20"]: return "EMA5 < SMA20"
+        if row["TSI"]<0:return "TSI < 0"
+        if row["DMP_14"]<row["DMN_14"]:return "DI+ < DI-"
+        if row["RSI"]>80: return "RSI > 80"
+        if row["Close"]<row["SMA20"]: return "Close price down"
 
     def record_strategy(self,change,start_date,end_date):
         if change>=0:

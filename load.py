@@ -20,7 +20,7 @@ class LoadTrade(object):
     def __init__(self):
         self.__dbconn=SQLDB()
 
-    def add_new_records(self,tickr,asset="",volume="",industry="",sector=""):
+    def add_new_records(self,tickr="",asset="",volume="",industry="",sector=""):
         self.__tickr=tickr
         self.__asset=asset
         self.__volume=volume
@@ -32,7 +32,7 @@ class LoadTrade(object):
         #self.process()
         #print(self.__df.tail(5))
 
-        self.__insert_records(df)
+        self.__insert_records(df,tickr)
         #self.__process_records(False)
 
     def __calculate_all_indicators(self,df):
@@ -52,9 +52,10 @@ class LoadTrade(object):
 
         """you should not be able to access dataframe from outside the class"""
         df=pd.read_csv(io.StringIO(s.decode('utf-8')))
+        print(df.head())
         df=df.dropna()
         df_columns=['Date','High','Low','Close','Adj Close']
-
+        print(df.columns)
         if not set(df_columns).issubset(df.columns):
             raise ValueError(f"One or more columns are missing {df_columns}")
 
@@ -76,7 +77,7 @@ class LoadTrade(object):
     def update_existing_records(self,tickr=''):
         """use this function to update the records, offload it to celery in the future"""
         stock_master_df=self.__dbconn.get_tickr(tickr)
-        #print(stock_master_df.head())
+
         if stock_master_df.empty:
             raise ValueError(f"data does not exist for {tickr}")
 
@@ -94,17 +95,20 @@ class LoadTrade(object):
                     self.__endDate=datetime(2012,5,12)
                     d1=self.__dbconn.get_stock_details(stock_master_df.iloc[0].Id,last_updated_date,self.__endDate.strftime("%Y-%m-%d"))
                     d1['Date'] = pd.to_datetime(d1['Date'], format = '%Y-%m-%d')
-                    d1.set_index(['Date'], inplace=True)
+                    if d1.empty:
+                        raise ValueError("Dataframe is empty")
+                    #d1.set_index(['Date'], inplace=True)
                     result=pd.concat([d1,mask])
                     df=self.__calculate_all_indicators(result)
-                    self.__dbconn.delete_stock_details(int(stock_master_df.iloc[0].Id))
-                    df['stockId']=int(stock_master_df.iloc[0].Id)
-                    self.__dbconn.save_data('stockdetails',df)
-                    sql = """ UPDATE public.stockmaster SET "LastUpdatedDate" = %s WHERE "Id" = %s"""
-                    self.__dbconn.update_stock_master(sql,current_date,int(stock_master_df.iloc[0].Id))
-                    print(f"Records updated for {tickr}")
-                else:
-                    print("no rows found for update")
+                    if not df.empty:
+                        self.__dbconn.delete_stock_details(int(stock_master_df.iloc[0].Id))
+                        df['stockId']=int(stock_master_df.iloc[0].Id)
+                        self.__dbconn.save_data('stockdetails',df)
+
+        sql = """ UPDATE public.stockmaster SET "LastUpdatedDate" = %s WHERE "Id" = %s"""
+        self.__dbconn.update_stock_master(sql,current_date,int(stock_master_df.iloc[0].Id))
+        print(f"Records updated for {tickr}")
+
 
     def __calculate_moving_average(self,df):
         """use this function to calculate moving averages for the asset
@@ -146,8 +150,11 @@ class LoadTrade(object):
             1. if DI+>DI- its a buy signal
             2. if DI+<DI- its a sell signal"""
 
+        #print(df.head())
         adx_df=round(ta.adx(df['High'],df['Low'],df['Close']),2)
+        #print(adx_df.tail())
         df=pd.concat([df,adx_df],axis=1)
+        print("Succssfully merged")
         return df
 
     def __insert_records(self,df,tickr):
