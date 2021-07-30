@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 
+import argparse
 import datetime
 import io
 import os
 import time as t
-from datetime import datetime, time,timedelta
+from datetime import datetime, time, timedelta
 
 import pandas as pd
 from prettytable import PrettyTable
@@ -15,8 +16,13 @@ from connection import SQLDB
 from load import LoadTrade
 from scraper import get_live_data
 from utilities import send_email
+import smtplib
+from os.path import basename
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import COMMASPACE, formatdate
 
-import argparse
 
 class Updater:
     def __init__(self):
@@ -56,7 +62,7 @@ class Updater:
             except Exception as e:
                 print(f"Exception occured during updating the records {e}")
 
-        send_email("Daily update of the data was complete","Update Data")
+        send_email("Daily update of the data was complete","Update Data",f"{datetime.now().strftime('%Y-%m-%d')}-report.log")
 
 
     def perform_backtest(self):
@@ -106,9 +112,10 @@ if __name__=='__main__':
         u.update_data()
     elif args.m=="load":
         u.load_data()
+
     
-    # u=Updater()
-    # u.load_data()
+    #u=Updater()
+    #u.load_data()
     #u.perform_backtest()
     #u.update_data()
 

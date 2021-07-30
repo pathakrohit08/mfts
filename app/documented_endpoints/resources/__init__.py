@@ -1,9 +1,11 @@
-from flask import request,jsonify,Response
-from flask_restx import Namespace, Resource, fields
+from datetime import datetime, timedelta
 from http import HTTPStatus
+
+from flask import Response, jsonify, request
+from flask_restx import Namespace, Resource, fields
+
 from app.tasks import *
 from connection import SQLDB
-from datetime import datetime, timedelta
 
 namespace = Namespace('MFTS','resource endpoints', '/v1/trading-system')
 

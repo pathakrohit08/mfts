@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_restx import Api
+
 #from blueprints.documented_endpoints.entities import namespace as entities_ns
 from app.documented_endpoints.resources import namespace as resource_ns
 

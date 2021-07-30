@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 
+
 def get_live_data(STOCK_TICKR,verbose=False):
     if verbose:
         print(f'##########################{STOCK_TICKR}##########################')

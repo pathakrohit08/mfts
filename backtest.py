@@ -1,13 +1,15 @@
 """Use this class to backtest your strategy"""
 
+from datetime import datetime, timedelta
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
 import config
 from config import Config
 from connection import SQLDB
-from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-import pandas as pd
 
 
 class BackTest(object):

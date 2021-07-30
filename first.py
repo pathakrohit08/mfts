@@ -1,16 +1,19 @@
+import math
+import os
+import time
+
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import pandas_ta as ta
-import config
-from config import Config
-import os
 import seaborn as sns
-import numpy as np
-import math
-import matplotlib.pyplot as plt
-from connection import SQLDB
+
+import config
 import scraper
-from scraper import get_historic_data,get_live_data
-import time
+from config import Config
+from connection import SQLDB
+from scraper import get_historic_data, get_live_data
+
 tickr='AMC'
 price_col='Close'
 positive=[]

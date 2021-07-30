@@ -2,10 +2,12 @@
 """
 
 import os
-from flask import Flask, render_template,Blueprint,request
-from celery import Celery  
-from config import Config 
+
+from celery import Celery
+from flask import Blueprint, Flask, render_template, request
 from flask_compress import Compress
+
+from config import Config
 
 compress = Compress()
 
