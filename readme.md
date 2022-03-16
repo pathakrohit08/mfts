@@ -1,3 +1,5 @@
+
+[![test](https://github.com/pathakrohit08/mfts/actions/workflows/test.yml/badge.svg)](https://github.com/pathakrohit08/mfts/actions/workflows/test.yml)
 1. Market
     market.py will get real_time_data from scraper module and last n days data from load module.
     it will check for buy signal and sell signal
