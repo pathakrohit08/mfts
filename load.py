@@ -35,6 +35,7 @@ class LoadTrade(object):
         self.__insert_records(df,tickr)
         #self.__process_records(False)
 
+    
     def __calculate_all_indicators(self,df):
         """use this function to calculate all the indicators value"""
         df=self.__calculate_moving_average(df)
@@ -52,10 +53,10 @@ class LoadTrade(object):
 
         """you should not be able to access dataframe from outside the class"""
         df=pd.read_csv(io.StringIO(s.decode('utf-8')))
-        print(df.head())
+        #print(df.head())
         df=df.dropna()
         df_columns=['Date','High','Low','Close','Adj Close']
-        print(df.columns)
+        #print(df.columns)
         if not set(df_columns).issubset(df.columns):
             raise ValueError(f"One or more columns are missing {df_columns}")
 
@@ -87,6 +88,7 @@ class LoadTrade(object):
 
         if current_date!=last_updated_date and current_date>last_updated_date:
             df=self.__get_all_data(tickr)
+            #print(df.head())
             if not df.empty:
                 mask = df.loc[last_updated_date:current_date, :]
                 mask=mask.iloc[1:]
@@ -94,16 +96,21 @@ class LoadTrade(object):
                     """we found records to be updated"""
                     self.__endDate=datetime(2012,5,12)
                     d1=self.__dbconn.get_stock_details(stock_master_df.iloc[0].Id,last_updated_date,self.__endDate.strftime("%Y-%m-%d"))
+                    #print(d1.head())
                     d1['Date'] = pd.to_datetime(d1['Date'], format = '%Y-%m-%d')
                     if d1.empty:
-                        raise ValueError("Dataframe is empty")
-                    #d1.set_index(['Date'], inplace=True)
-                    result=pd.concat([d1,mask])
-                    df=self.__calculate_all_indicators(result)
-                    if not df.empty:
-                        self.__dbconn.delete_stock_details(int(stock_master_df.iloc[0].Id))
-                        df['stockId']=int(stock_master_df.iloc[0].Id)
-                        self.__dbconn.save_data('stockdetails',df)
+                        # resetting data for any deleted entries
+                        print(f"{tickr} is empty. updaing the data")
+                        df=self.__get_all_data(tickr)
+                        df=self.__calculate_all_indicators(df)
+                        self.__insert_into_stockdetails(df,tickr,int(stock_master_df.iloc[0].Id))
+                    else:
+                        result=pd.concat([d1,mask])
+                        df=self.__calculate_all_indicators(result)
+                        if not df.empty:
+                            self.__dbconn.delete_stock_details(int(stock_master_df.iloc[0].Id))
+                            df['stockId']=int(stock_master_df.iloc[0].Id)
+                            self.__dbconn.save_data('stockdetails',df)
 
         sql = """ UPDATE public.stockmaster SET "LastUpdatedDate" = %s WHERE "Id" = %s"""
         self.__dbconn.update_stock_master(sql,current_date,int(stock_master_df.iloc[0].Id))
@@ -165,7 +172,12 @@ class LoadTrade(object):
         stock_id=self.__dbconn.save_stock_master(sql,self.__tickr,
                 self.__asset,self.__volume,
                 self.__sector,self.__industry,datetime.now().strftime('%Y-%m-%d'))
-        
+
+        self.__insert_into_stockdetails(df,tickr,stock_id)
+
+    def __insert_into_stockdetails(self,df,tickr,stock_id):
+        #print(df.head(5))
+        #print(df.tail(5))
         df['stockId']=stock_id
         #df['stockId']=stock_master_df.iloc[0].Id
 

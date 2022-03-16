@@ -190,9 +190,9 @@ class BackTest(object):
 
 
         if active_strategy:
-            return [self.__tickr, index.strftime('%Y-%m-%d'),"YES" ,"All",row['EMA5'],row['SMA20'],row['ADX_14'],row['DMP_14'],row['DMN_14'],row['RSI'],row['TSI'],self.calculate_accuracy(),sum(self.trading_days)//len(self.trading_days)]
+            return [self.__tickr, index.strftime('%Y-%m-%d'),"YES" ,"All",round(row['Close'],2),row['EMA5'],row['SMA20'],row['ADX_14'],row['DMP_14'],row['DMN_14'],row['RSI'],row['TSI'],self.calculate_accuracy(),sum(self.trading_days)//len(self.trading_days)]
         else:
-            return [self.__tickr, index.strftime('%Y-%m-%d'),"NO" ,self.__get_sell_signal_reason(row),row['EMA5'],row['SMA20'],row['ADX_14'],row['DMP_14'],row['DMN_14'],row['RSI'],row['TSI'],self.calculate_accuracy(),sum(self.trading_days)//len(self.trading_days)]
+            return [self.__tickr, index.strftime('%Y-%m-%d'),"NO" ,self.__get_sell_signal_reason(row),round(row['Close'],2),row['EMA5'],row['SMA20'],row['ADX_14'],row['DMP_14'],row['DMN_14'],row['RSI'],row['TSI'],self.calculate_accuracy(),sum(self.trading_days)//len(self.trading_days)]
 
 
     

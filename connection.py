@@ -98,7 +98,7 @@ class SQLDB(object):
         df = pd.read_sql(f'select * from stockdetails where "stockId" =\'{tickrId}\' and "Date">=\'{end_date}\' and "Date"<=\'{start_date}\' order by "Date" asc', con=self.__engine)
         return df
 
-    def get_tickr(self,tickr):
+    def get_tickr(self,tickr): 
         try:
             # tickrInfo="'"+tickr+"'"
             df = pd.read_sql(f'select * from "stockmaster" where "Symbol" =\'{tickr}\';', con=self.__engine)
@@ -111,6 +111,7 @@ class SQLDB(object):
 
         rows_deleted=None
         try:
+            print("Delete was called")
             # create a new cursor
             cur =self.__conn.cursor()
             # execute the INSERT statement
