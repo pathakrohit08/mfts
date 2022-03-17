@@ -1,0 +1,15 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch
+  jobs:
+    build:
+      name: Run API
+      runs-on: ubuntu-latest
+      steps:
+        -name: Build API
+        run: |
+          echo "Build API"
+          sleep 10s
