@@ -15,8 +15,6 @@ jobs:
       - name: Get changed files using defaults
         id: changed-files
         uses: actions/checkout@v2
-        run: |
-          echo "hello world"
 
       - name: Get changed files using a comma separator
         id: changed-files-comma
@@ -26,6 +24,7 @@ jobs:
 
       - name: List all added files
         run: |
+          echo "hello world"
           for file in ${{ steps.changed-files.outputs.added_files }}; do
             echo "$file was added"
           done
