@@ -27,11 +27,11 @@ jobs:
           echo "Added+Modified:"
           echo "${{ steps.abc.outputs.added_modified }}"
 
-        - name: List all modified files
-          run: |
-            for file in ${{ steps.abc.outputs.modified }}; do
-              echo "$file was added"
-            done
+      - name: List all modified files
+        run: |
+          for file in ${{ steps.abc.outputs.modified }}; do
+            echo "$file was added"
+          done
 
       - name: setup python
         uses: actions/setup-python@v2
