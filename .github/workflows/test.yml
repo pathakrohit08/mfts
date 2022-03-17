@@ -7,14 +7,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 2  # OR "2" -> To retrieve the preceding commit.
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
 
-      - name: Get changed files
+      - name: Get changed files using defaults
         id: changed-files
-        uses: actions/mfts@v2
+        uses: actions/checkout@v2
 
       - name: List all added files
         run: |
@@ -41,7 +40,7 @@ jobs:
 
       - name: Get specific changed files
         id: changed-files-specific
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           files: |
             my-file.txt
@@ -83,14 +82,14 @@ jobs:
 
       - name: Use a source file or list of file(s) to populate to files input.
         id: changed-files-specific-source-file
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           files_from_source_file: |
             test/changed-files-list.txt
 
       - name: Use a source file or list of file(s) to populate to files input and optionally specify more files.
         id: changed-files-specific-source-file-and-specify-files
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           files_from_source_file: |
             test/changed-files-list.txt
@@ -99,25 +98,25 @@ jobs:
 
       - name: Use a different commit SHA
         id: changed-files-custom-sha
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           sha: ${{ github.event.pull_request.head.sha }}
 
       - name: Use a different base SHA
         id: changed-files-custom-base-sha
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           base_sha: "2096ed0"
           
-      - name: changed-files into dir1
-        uses: action/checkout@v2
+      - name: Checkout into dir1
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
           path: dir1
 
       - name: Run changed-files with defaults on the dir1
         id: changed-files-for-dir1
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           path: dir1
 
@@ -129,13 +128,13 @@ jobs:
 
       - name: Run changed-files using the last commit on the remote branch
         id: changed-files-since-last-remote-commit
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           since_last_remote_commit: "true"
       
       - name: Run changed-files using the fork point of a pull request
         id: changed-files-fork-point
-        uses: action/checkout@v2
+        uses: actions/checkout@v2
         with:
           use_fork_point: "true"
 
