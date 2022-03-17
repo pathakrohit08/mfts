@@ -14,7 +14,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: actions/changed-files@v2
+        uses: actions/mfts@v2
 
       - name: List all added files
         run: |
