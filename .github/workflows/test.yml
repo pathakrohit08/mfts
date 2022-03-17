@@ -30,7 +30,6 @@ jobs:
 
       - name: List all changed files
         run: |
-          echo "hello world"
           for file in ${{ steps.changed-files.outputs.modified_files }}; do
             echo "$file was added"
           done
