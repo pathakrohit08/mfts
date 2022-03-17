@@ -32,6 +32,6 @@ def send_email(subject, text, file_name=''):
         print("Exception occured "+str(e))
 
 if __name__=='__main__':
-    print("12")
+    print("12eeee")
     print("123")
     send_email("commit received","Action was run")
