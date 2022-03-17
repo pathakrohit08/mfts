@@ -23,6 +23,6 @@ jobs:
           echo "${{ steps.abc.outputs.renamed }}"
           echo "Modified:"
           echo "${{ steps.abc.outputs.modified }}"
-          echo "Content=$(cat .github/workflows/test.yml)"
+          echo "Content=$(cat ${{ steps.abc.outputs.modified }})"
           echo "Added+Modified:"
           echo "${{ steps.abc.outputs.added_modified }}"
