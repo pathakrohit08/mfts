@@ -1,14 +1,14 @@
 name: Deploy
 on:
   push:
-    branches:
-      - main
-  jobs:
-    build:
-      name: Run API
-      runs-on: ubuntu-latest
-      steps:
-        -name: Build API
-        run: |
-          echo "Build API"
-          sleep 10s
+    branches: [ main ]
+    
+jobs:
+  build:
+    name: Run API
+    runs-on: ubuntu-latest
+    steps:
+      -name: Build API
+      run: |
+        echo "Build API"
+        sleep 10s
