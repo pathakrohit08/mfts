@@ -51,6 +51,7 @@ jobs:
             *.png
             !*.md
             *.jpeg
+            *.py
             **/migrate-*.sql
           files_ignore: |
             *.yml
