@@ -33,4 +33,5 @@ def send_email(subject, text, file_name=''):
 
 if __name__=='__main__':
     print("12")
+    print("123")
     send_email("commit received","Action was run")
