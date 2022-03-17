@@ -30,7 +30,9 @@ jobs:
       - name: List all modified files
         run: |
           for file in ${{ steps.abc.outputs.modified }}; do
-            if [ "${file: -4}" == ".py" ]
+            if [ "${file: -3}" == ".py" ]
+              echo "$file was added"
+            elif [ "${file: -4}" == ".yml" ]
               echo "$file was added"
           done
 
