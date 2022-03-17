@@ -29,8 +29,9 @@ jobs:
 
       - name: List all changed files
         run: |
+          echo ${{ steps.changed-files.outputs.modified_files }}
           for file in ${{ steps.changed-files.outputs.modified_files }}; do
-            echo "$file was added"
+            echo "$file was modified"
           done
 
       - name: Run step when a file changes
