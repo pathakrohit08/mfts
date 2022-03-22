@@ -18,6 +18,7 @@ class LoadTrade(object):
     code to backtest your strategy"""
 
     def __init__(self):
+        print("push")
         self.__dbconn=SQLDB()
 
     def add_new_records(self,tickr="",asset="",volume="",industry="",sector=""):
